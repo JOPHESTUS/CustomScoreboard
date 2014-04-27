@@ -18,28 +18,10 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="module-library">
-      <library name="bukkit.jar">
-        <CLASSES>
-          <root url="file://D:/Bukkit Dev/bukkit.jar" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="http://jd.bukkit.org/rb/apidocs/" />
-        </JAVADOC>
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Vault.jar">
-        <CLASSES>
-          <root url="file://D:/Bukkit Dev/Vault.jar" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="Vault" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.7.2" level="project" />
     <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.7.9-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: net.milkbowl.vault:Vault:1.2.32" level="project" />
   </component>
 </module>
 

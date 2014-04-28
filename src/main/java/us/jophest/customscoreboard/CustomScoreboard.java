@@ -32,10 +32,12 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     public List<String> myTop5 = new ArrayList();
     ScoreboardManager manager2;
     String section;
+    String killSection;
     Objective obj;
     Objective listobj;
     Scoreboard board;
     Scoreboard list;
+    ConfigurationSection score;
 
 
     public void onDisable() {
@@ -100,32 +102,43 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 reloadConfig();
 
                 bal = (int) econ.getBalance(playaa.getName());
-                if (!getConfig().contains("deaths." + playaa.getName())){
+                if (!getConfig().contains("deaths." + playaa.getName())) {
                     getConfig().set("deaths." + playaa.getName(), 0);
                 }
                 death = getConfig().getInt("deaths." + playaa.getName());
 
 
-
                 // commentstart
                 Map scoreMap = new HashMap();
                 List finalScore = new ArrayList();
+// total kills
+                if (getConfig().getBoolean("perworld")) {
+                    killSection = "kills";
 
-                int amount = getConfig().getInt("kills.Kits." + playaa.getName()) + getConfig().getInt("kills.Arena." + playaa.getName()) + getConfig().getInt("kills.Stone." + playaa.getName()) + getConfig().getInt("kills.pvp." + playaa.getName());
-                kill = amount;
+                    ConfigurationSection killAmountSect = getConfig().getConfigurationSection(killSection);
+                    for (String killAmount : killAmountSect.getKeys(false)) {
 
-                section = "kills." + playaa.getWorld().getName();
-
-                ConfigurationSection score = getConfig().getConfigurationSection(section);
-               if (!getConfig().contains("kills." + playaa.getWorld().getName() + "." + playaa.getName())){
-                 getConfig().set("kills." + playaa.getWorld().getName() + "." + playaa.getName(), 0);
-                     }
-                for (String playerName : score.getKeys(false)) {
-
-                    int kills = score.getInt(playerName);
+                        int kills = killAmountSect.getInt(killAmount);
+                        kill = kills;
 
 
-                    scoreMap.put(playerName, Integer.valueOf(kills));
+                    }
+                    section = "kills." + playaa.getWorld().getName();
+
+                    score = getConfig().getConfigurationSection(section);
+                    if (!getConfig().contains("kills." + playaa.getWorld().getName() + "." + playaa.getName())) {
+                        getConfig().set("kills." + playaa.getWorld().getName() + "." + playaa.getName(), 0);
+                    }
+                    for (String playerName : score.getKeys(false)) {
+
+                        int kills = score.getInt(playerName);
+
+
+                        scoreMap.put(playerName, Integer.valueOf(kills));
+                    }
+
+                } else {
+                    kill = getConfig().getInt("kills." + playaa.getName());
                 }
 
 
@@ -175,19 +188,19 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                         String[] parts0 = scorez.get(0).split("-");
                         String[] parts1 = scorez.get(1).split("-");
                         String[] parts2 = scorez.get(2).split("-");
-                        parts0[1] = parts0[1].replace("?","§");
-                        parts1[1] = parts1[1].replace("?","§");
-                        parts2[1] = parts2[1].replace("?","§");
+                        parts0[1] = parts0[1].replace("?", "§");
+                        parts1[1] = parts1[1].replace("?", "§");
+                        parts2[1] = parts2[1].replace("?", "§");
                         parts0[0] = parts0[0].replace("?", "§");
                         parts1[0] = parts1[0].replace("?", "§");
                         parts2[0] = parts2[0].replace("?", "§");
-                         if(parts0[1].equals(parts1[1])){
-                             parts0[1] = parts0[1].replace("§b", "§4§b");
-                         }
-                        if(parts0[1].equals(parts2[1])){
+                        if (parts0[1].equals(parts1[1])) {
                             parts0[1] = parts0[1].replace("§b", "§4§b");
                         }
-                        if(parts1[1].equals(parts2[1])){
+                        if (parts0[1].equals(parts2[1])) {
+                            parts0[1] = parts0[1].replace("§b", "§4§b");
+                        }
+                        if (parts1[1].equals(parts2[1])) {
                             parts1[1] = parts1[1].replace("§b", "§4§b");
                         }
 
@@ -221,11 +234,11 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 
                         String[] parts0 = scorez.get(0).split("-");
                         String[] parts1 = scorez.get(1).split("-");
-                        parts0[1] = parts0[1].replace("?","§");
-                        parts1[1] = parts1[1].replace("?","§");
-                        parts0[0] = parts0[0].replace("?","§");
-                        parts1[0] = parts1[0].replace("?","§");
-                        if(parts0[1].equals(parts1[1])){
+                        parts0[1] = parts0[1].replace("?", "§");
+                        parts1[1] = parts1[1].replace("?", "§");
+                        parts0[0] = parts0[0].replace("?", "§");
+                        parts1[0] = parts1[0].replace("?", "§");
+                        if (parts0[1].equals(parts1[1])) {
                             parts0[1] = parts0[1].replace("§b", "§4§b");
                         }
 
@@ -249,8 +262,8 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                     } else if (scorez.size() == 1) {
 
                         String[] parts0 = scorez.get(0).split("-");
-                        parts0[1] = parts0[1].replace("?","§");
-                        parts0[0] = parts0[0].replace("?","§");
+                        parts0[1] = parts0[1].replace("?", "§");
+                        parts0[0] = parts0[0].replace("?", "§");
 
                         if (parts0[0].length() >= 16) {
 
@@ -270,9 +283,9 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 saveConfig();
                 reloadConfig();
                 obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-                obj.setDisplayName(ChatColor.DARK_RED.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "    STATS    ");
-                listobj.setDisplaySlot(DisplaySlot.SIDEBAR);
-                listobj.setDisplayName("§f§lAce§8§lPvP");
+                String title = getConfig().getString("title");
+                title = title.replace("&", "§");
+                obj.setDisplayName(title);
 
                 Score coins = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GOLD.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Coins:")); //Get a fake offline player
                 Score coinsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.YELLOW.toString() + bal)); //Get a fake offline player
@@ -283,18 +296,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Score line = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + ChatColor.BOLD + "------------"));
                 Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best Players"));
 
-                Score list1 = listobj.getScore(Bukkit.getOfflinePlayer("§4§lKitPvP"));
-                Score list2 = listobj.getScore(Bukkit.getOfflinePlayer("§fPlayers: §8" + Bukkit.getWorld("Kits").getPlayers().size()));
-                Score list3 = listobj.getScore(Bukkit.getOfflinePlayer("§4§lWood"));
-                Score list4 = listobj.getScore(Bukkit.getOfflinePlayer("§7Players: §f" + Bukkit.getWorld("Stone").getPlayers().size()));
-                Score list5 = listobj.getScore(Bukkit.getOfflinePlayer("§4§lArena"));
-                Score list6 = listobj.getScore(Bukkit.getOfflinePlayer("§8Players: §7" + Bukkit.getWorld("Arena").getPlayers().size()));
-                list1.setScore(6);
-                list2.setScore(5);
-                list3.setScore(4);
-                list4.setScore(3);
-                list5.setScore(2);
-                list6.setScore(1);
+
                 coins.setScore(14);
 
 
@@ -305,18 +307,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 deathsAmount.setScore(9);
                 line.setScore(8);
                 best.setScore(7);
-                if (playaa.getWorld().getName().equalsIgnoreCase("stone")){
-                    playaa.setScoreboard(board);
-                }
-                if (playaa.getWorld().getName().equalsIgnoreCase("arena")){
-                    playaa.setScoreboard(board);
-                }
-                if (playaa.getWorld().getName().equalsIgnoreCase("kits")){
-                    playaa.setScoreboard(board);
-                }
-                if (playaa.getWorld().getName().equalsIgnoreCase("pvp")){
-                    playaa.setScoreboard(list);
-               }
+                playaa.setScoreboard(board);
 
 
             }
@@ -330,7 +321,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     @EventHandler
     public void join(PlayerJoinEvent e) {
 
-            setupScoreboard(e.getPlayer());
+        setupScoreboard(e.getPlayer());
 
 
     }
@@ -339,11 +330,21 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     public void kill(PlayerDeathEvent e) {
         if (e.getEntity().getKiller() instanceof Player && e.getEntity() instanceof Player) {
             String world = e.getEntity().getWorld().getName();
-            int kills = getConfig().getInt("kills." + world + "." + e.getEntity().getKiller().getName());
+            int kills;
+            if (getConfig().getBoolean("perworld")) {
+                kills = getConfig().getInt("kills." + world + "." + e.getEntity().getKiller().getName());
+            } else {
+                kills = getConfig().getInt("kills." + e.getEntity().getKiller().getName());
+            }
             int deaths = getConfig().getInt("deaths." + e.getEntity().getName());
             int killz = kills + 1;
             int deathz = deaths + 1;
-            getConfig().set("kills." + world + "." + e.getEntity().getKiller().getName(), killz);
+            if (getConfig().getBoolean("perworld")) {
+                getConfig().set("kills." + world + "." + e.getEntity().getKiller().getName(), killz);
+            } else {
+                getConfig().set("kills." + e.getEntity().getKiller().getName(), killz);
+
+            }
             getConfig().set("deaths." + e.getEntity().getName(), deathz);
             saveConfig();
             reloadConfig();
@@ -356,7 +357,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void swap(PlayerChangedWorldEvent e){
+    public void swap(PlayerChangedWorldEvent e) {
         setupScoreboard(e.getPlayer());
     }
 

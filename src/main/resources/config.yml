@@ -1,16 +1,14 @@
 #how often do you want the values in the scoreboard to update? (in seconds) - updating too often (< 1 min) can lead to minor lag
 howoften: 100
 
+#The scoreboard heading Can't be more than 16 chars, I think. (a colour code counts as 2)
+title: '&4Server Stats'
+
+#Do you want kills to be per-world?
+#perworld: true
+
 #this area is for storing each player's kills + deaths. This is not something you need to change
 kills:
-  pvp:
-    JOPHESTUS: 0
-  Kits:
-    JOPHESTUS: 0
-  Stone:
-    JOPHESTUS: 0
-  Arena:
-    JOPHESTUS: 0
 
 deaths:
     JOPHESTUS: 22

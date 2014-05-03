@@ -3,6 +3,8 @@ package us.jophest.customscoreboard;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,33 +114,21 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Map scoreMap = new HashMap();
                 List finalScore = new ArrayList();
 // total kills
-                if (getConfig().getBoolean("perworld")) {
-                    killSection = "kills";
-
-                    ConfigurationSection killAmountSect = getConfig().getConfigurationSection(killSection);
-                    for (String killAmount : killAmountSect.getKeys(false)) {
-
-                        int kills = killAmountSect.getInt(killAmount);
-                        kill = kills;
 
 
-                    }
-                    section = "kills." + playaa.getWorld().getName();
-
-                    score = getConfig().getConfigurationSection(section);
-                    if (!getConfig().contains("kills." + playaa.getWorld().getName() + "." + playaa.getName())) {
-                        getConfig().set("kills." + playaa.getWorld().getName() + "." + playaa.getName(), 0);
-                    }
-                    for (String playerName : score.getKeys(false)) {
-
-                        int kills = score.getInt(playerName);
+                kill = getConfig().getInt("kills." + playaa.getName());
 
 
-                        scoreMap.put(playerName, Integer.valueOf(kills));
-                    }
+                score = getConfig().getConfigurationSection("kills");
+                if (!getConfig().contains("kills." + playaa.getName())) {
+                    getConfig().set("kills." + playaa.getName(), 0);
+                }
+                for (String playerName : score.getKeys(false)) {
 
-                } else {
-                    kill = getConfig().getInt("kills." + playaa.getName());
+                    int kills = score.getInt(playerName);
+
+
+                    scoreMap.put(playerName, Integer.valueOf(kills));
                 }
 
 
@@ -326,6 +316,37 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 
     }
 
+    public boolean onCommand(CommandSender sender, Command command,
+                             String label, String[] args) {
+        // TODO Auto-generated method stub
+
+
+        if (command.getName().equalsIgnoreCase("customscoreboard")) {
+            if (args.length == 0) {
+                sender.sendMessage(ChatColor.LIGHT_PURPLE + "~~~~~~~~~~~~~~~~~~~~~~");
+                sender.sendMessage(ChatColor.GREEN + "CustomScoreboard v" + this.getDescription().getVersion().toString());
+                sender.sendMessage(ChatColor.BLUE + "By JOPHESTUS");
+                sender.sendMessage(ChatColor.RED + "/cs reload" + ChatColor.GREEN + " - reloads all scoreboards");
+                sender.sendMessage(ChatColor.LIGHT_PURPLE + "~~~~~~~~~~~~~~~~~~~~~~");
+            } else if (args.length == 1 || args[0].equalsIgnoreCase("reload")) {
+                if (sender.hasPermission("customscoreboard.reload")) {
+
+
+                    for (Player plr : Bukkit.getServer().getOnlinePlayers()) {
+                        setupScoreboard(plr);
+                    }
+                    sender.sendMessage(ChatColor.GREEN + "All scoreboards reloaded");
+                } else {
+                    sender.sendMessage(ChatColor.GREEN + "You can't do that");
+                }
+            }
+        }
+
+
+        return super.onCommand(sender, command, label, args);
+
+    }
+
     @EventHandler
     public void kill(PlayerDeathEvent e) {
         if (e.getEntity().getKiller() instanceof Player && e.getEntity() instanceof Player) {
@@ -348,13 +369,14 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
             getConfig().set("deaths." + e.getEntity().getName(), deathz);
             saveConfig();
             reloadConfig();
-
+            setupScoreboard(e.getEntity());
+            setupScoreboard(e.getEntity().getKiller());
         }
 
 
-        setupScoreboard(e.getEntity());
-        setupScoreboard(e.getEntity().getKiller());
+
     }
+
 
     @EventHandler
     public void swap(PlayerChangedWorldEvent e) {

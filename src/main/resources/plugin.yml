@@ -4,3 +4,4 @@ version: 1.2
 author: JOPHESTUS
 description: Displays custom scoreboards
 commands:
+    customscoreboard:

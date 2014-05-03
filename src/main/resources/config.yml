@@ -4,11 +4,8 @@ howoften: 100
 #The scoreboard heading Can't be more than 16 chars, I think. (a colour code counts as 2)
 title: '&4Server Stats'
 
-#Do you want kills to be per-world?
-#perworld: true
-
 #this area is for storing each player's kills + deaths. This is not something you need to change
 kills:
 
 deaths:
-    JOPHESTUS: 22
+

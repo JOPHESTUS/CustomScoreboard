@@ -433,9 +433,9 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
             setupScoreboard(e.getEntity().getKiller());
         }       else{
             int pvedeaths;
-            pvedeaths = getConfig().getInt("pvedeaths." + e.getEntity().getPlayer().getName());
+            pvedeaths = getConfig().getInt("gendeaths." + e.getEntity().getPlayer().getName());
             pvedeaths ++;
-            getConfig().set("pvedeaths." + e.getEntity().getPlayer().getName(), pvedeaths);
+            getConfig().set("gendeaths." + e.getEntity().getPlayer().getName(), pvedeaths);
             saveConfig();
             reloadConfig();
             setupScoreboard(e.getEntity().getPlayer());

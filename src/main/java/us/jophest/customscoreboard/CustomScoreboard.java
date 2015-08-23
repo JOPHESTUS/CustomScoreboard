@@ -288,7 +288,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Score kills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GREEN.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "PVP Kills:"));
                 Score killsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + kill));
                 Score deaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "PVP Deaths:"));
-                Score deathsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + death));
+                Score deathamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + death));
                 Score pvedeaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Deaths:"));
                 Score PVEdeathsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvedeath));
                 Score pvehkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Mob Kills:"));
@@ -305,7 +305,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 kills.setScore(22);
                 killsAmount.setScore(21);
                 deaths.setScore(20);
-                deathsAmount.setScore(19);
+                   deathamt.setScore(19);
                 pvedeaths.setScore(18);
                 PVEdeathsAmount.setScore(17);
                 pvehkills.setScore(16);
@@ -387,15 +387,15 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     public void die(EntityDeathEvent e) {
         int pveHKills;
         int pvePKills;
-        if(e.getEntity() instanceof Monster){
-         pveHKills = getConfig().getInt("pvehkills." +e.getEntity().getKiller().getName());
+        if(e.getEntity() instanceof Monster && e.getEntity().getKiller() instanceof Player){
+         pveHKills = getConfig().getInt("pvehkills." + e.getEntity().getKiller().getName());
             pveHKills ++;
             getConfig().set("pvehkills." + e.getEntity().getKiller().getName(), pveHKills);
                   saveConfig();
             reloadConfig();
             setupScoreboard(e.getEntity().getKiller());
 
-        }else if(e.getEntity() instanceof Animals)  {
+        }else if(e.getEntity() instanceof Animals && e.getEntity().getKiller() instanceof Player)  {
             pvePKills = getConfig().getInt("pvehkills." +e.getEntity().getKiller().getName());
             pvePKills ++;
             getConfig().set("pvepkills." + e.getEntity().getKiller().getName(), pvePKills);

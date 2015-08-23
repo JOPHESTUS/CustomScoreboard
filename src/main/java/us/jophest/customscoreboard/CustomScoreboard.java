@@ -52,7 +52,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     public void onDisable() {
         // TODO: Place any custom disable code here.
 
-
+    }
     public void onEnable(){
         getServer().getPluginManager().registerEvents(this, this);
 
@@ -350,7 +350,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 sender.sendMessage(ChatColor.BLUE + "By JOPHESTUS");
                 sender.sendMessage(ChatColor.RED + "/cs reload" + ChatColor.GREEN + " - reloads all scoreboards");
                 sender.sendMessage(ChatColor.LIGHT_PURPLE + "~~~~~~~~~~~~~~~~~~~~~~");
-            } else if (args.length == 1 || args[0].equalsIgnoreCase("reload")) {
+            } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                 if (sender.hasPermission("customscoreboard.reload")) {
 
 
@@ -361,14 +361,14 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 } else {
                     sender.sendMessage(ChatColor.GREEN + "You can't do that");
                 }
-            }      else if (args.length == 1 || args[0].equalsIgnoreCase("disable")) {
+            }      else if (args.length == 1 && args[0].equalsIgnoreCase("disable")) {
 
                 cunts.add(sender.getName());
                 getConfig().set("cunts", cunts);
                 saveConfig();
                 reloadConfig();
 
-            }   else if (args.length == 1 || args[0].equalsIgnoreCase("enable")) {
+            }   else if (args.length == 1 && args[0].equalsIgnoreCase("enable")) {
 
             cunts.remove(sender.getName());
             getConfig().set("cunts", cunts);
@@ -447,7 +447,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 
 
 
-    }
+
 
 
     @EventHandler

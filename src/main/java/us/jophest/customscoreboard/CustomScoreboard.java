@@ -287,10 +287,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best Players"));
 
 
-                coins.setScore(14);
-
-
-                coinsAmount.setScore(13);
+                
                 kills.setScore(12);
                 killsAmount.setScore(11);
                 deaths.setScore(10);

@@ -292,9 +292,9 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Score pvedeaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Deaths:"));
                 Score PVEdeathsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvedeath));
                 Score pvehkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "M Kills:"));
-                Score pvehkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvehkills));
+                Score pvehkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvehkill));
                 Score pvepkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "A Kills:"));
-                Score pvepkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvepkills));
+                Score pvepkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvepkill));
 
                 Score line = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + ChatColor.BOLD + "------------"));
                 Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best Players"));

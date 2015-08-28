@@ -336,7 +336,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                              String label, String[] args) {
         // TODO Auto-generated method stub
 
-
+                  reloadConfig();
         if (command.getName().equalsIgnoreCase("customscoreboard")) {
             if (args.length == 0) {
                 sender.sendMessage(ChatColor.LIGHT_PURPLE + "~~~~~~~~~~~~~~~~~~~~~~");
@@ -355,7 +355,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 } else {
                     sender.sendMessage(ChatColor.GREEN + "You can't do that");
                 }
-            }      else if (args.length == 1 && args[0].equalsIgnoreCase("disable")) {
+            }      else if (args.length == 1 && args[0].equalsIgnoreCase("disable") && !cunts.contains(sender.getName())) {
 
                 cunts.add(sender.getName());
                 getConfig().set("cunts", cunts);

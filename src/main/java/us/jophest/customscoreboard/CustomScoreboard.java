@@ -11,6 +11,8 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -287,17 +289,13 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 
                 Score kills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GREEN.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "PVP Kills:"));
                 Score killsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + kill));
-                Score deaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "PVP Deaths:"));
+                Score deaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Deaths:"));
                 Score deathamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + death));
-                Score pvedeaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Deaths:"));
-                Score PVEdeathsAmount = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + pvedeath));
                 Score pvehkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Mob Kills:"));
                 Score pvehkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA.toString() + pvehkill));
-                Score pvepkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_PURPLE.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Animal Kills:"));
-                Score pvepkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE.toString() + pvepkill));
 
                 Score line = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + ChatColor.BOLD + "------------"));
-                Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best Players"));
+                Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best PVPers"));
 
 
 
@@ -306,12 +304,8 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 killsAmount.setScore(21);
                 deaths.setScore(20);
                    deathamt.setScore(19);
-                pvedeaths.setScore(18);
-                PVEdeathsAmount.setScore(17);
                 pvehkills.setScore(16);
                 pvehkillsamt.setScore(15);
-                pvepkills.setScore(14);
-                pvepkillsamt.setScore(13);
 
 
 
@@ -386,23 +380,17 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     @EventHandler
     public void die(EntityDeathEvent e) {
         int pveHKills;
-        int pvePKills;
-        if(e.getEntity() instanceof Monster && e.getEntity().getKiller() instanceof Player){
-         pveHKills = getConfig().getInt("pvehkills." + e.getEntity().getKiller().getName());
+
+        if(e.getEntity().getKiller() instanceof Player){
+            reloadConfig();
+         pveHKills = getConfig().getInt("pvekills." + e.getEntity().getKiller().getName());
             pveHKills ++;
-            getConfig().set("pvehkills." + e.getEntity().getKiller().getName(), pveHKills);
+            getConfig().set("pvekills." + e.getEntity().getKiller().getName(), pveHKills);
                   saveConfig();
             reloadConfig();
             setupScoreboard(e.getEntity().getKiller());
 
-        }else if(e.getEntity() instanceof Animals && e.getEntity().getKiller() instanceof Player)  {
-            pvePKills = getConfig().getInt("pvehkills." +e.getEntity().getKiller().getName());
-            pvePKills ++;
-            getConfig().set("pvepkills." + e.getEntity().getKiller().getName(), pvePKills);
-            saveConfig();
-            reloadConfig();
-            setupScoreboard(e.getEntity().getKiller());
-        }
+               }
 
     }
 
@@ -410,32 +398,26 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     @EventHandler
     public void kill(PlayerDeathEvent e) {
         if (e.getEntity().getKiller() instanceof Player && e.getEntity() instanceof Player) {
-            String world = e.getEntity().getWorld().getName();
+            reloadConfig();
             int kills;
-           // if (getConfig().getBoolean("perworld")) {
-          //      kills = getConfig().getInt("kills." + world + "." + e.getEntity().getKiller().getName());
-        //    } else {
-                kills = getConfig().getInt("kills." + e.getEntity().getKiller().getName());
-          //  }
-            int deaths = getConfig().getInt("deaths." + e.getEntity().getName());
-            int killz = kills + 1;
-            int deathz = deaths + 1;
-            if (getConfig().getBoolean("perworld")) {
-                getConfig().set("kills." + world + "." + e.getEntity().getKiller().getName(), killz);
-            } else {
-                getConfig().set("kills." + e.getEntity().getKiller().getName(), killz);
+            kills = getConfig().getInt("kills." + e.getEntity().getKiller().getName());
 
-            }
-            getConfig().set("deaths." + e.getEntity().getName(), deathz);
+            int deaths = getConfig().getInt("deaths." + e.getEntity().getName());
+            kills ++;
+            deaths ++;
+            getConfig().set("kills." + e.getEntity().getKiller().getName(), kills);
+
+
+            getConfig().set("deaths." + e.getEntity().getPlayer().getName(), deaths);
             saveConfig();
             reloadConfig();
             setupScoreboard(e.getEntity().getPlayer());
-            setupScoreboard(e.getEntity().getKiller());
+            setupScoreboard(e.getEntity().getKiller().getPlayer());
         }       else{
             int pvedeaths;
-            pvedeaths = getConfig().getInt("gendeaths." + e.getEntity().getPlayer().getName());
+            pvedeaths = getConfig().getInt("deaths." + e.getEntity().getPlayer().getName());
             pvedeaths ++;
-            getConfig().set("gendeaths." + e.getEntity().getPlayer().getName(), pvedeaths);
+            getConfig().set("deaths." + e.getEntity().getPlayer().getName(), pvedeaths);
             saveConfig();
             reloadConfig();
             setupScoreboard(e.getEntity().getPlayer());
@@ -446,7 +428,33 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
         }
 
 
+    @EventHandler
+    public void blockbreak(BlockBreakEvent e) {
+       reloadConfig();
+        int broken = getConfig().getInt("break." + e.getPlayer().getName());
+        broken ++;
+        getConfig().set("break." + e.getPlayer().getName(), broken);
+        saveConfig();
+        reloadConfig();
+        setupScoreboard(e.getPlayer());
 
+
+
+    }
+
+    @EventHandler
+    public void blockplace(BlockPlaceEvent e) {
+        reloadConfig();
+        int placed = getConfig().getInt("place." + e.getPlayer().getName());
+        placed ++;
+        getConfig().set("place." + e.getPlayer().getName(), placed);
+        saveConfig();
+        reloadConfig();
+        setupScoreboard(e.getPlayer());
+
+
+
+    }
 
 
 

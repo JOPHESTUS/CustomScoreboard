@@ -129,10 +129,15 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 kill = getConfig().getInt("kills." + playaa.getName());
 
 
-                score = getConfig().getConfigurationSection("kills");
+
+
+
                 if (!getConfig().contains("kills." + playaa.getName())) {
                     getConfig().set("kills." + playaa.getName(), 0);
                 }
+                   reloadConfig();
+                   score = getConfig().getConfigurationSection("kills");
+
                 for (String playerName : score.getKeys(false)) {
 
                     int kills = score.getInt(playerName);

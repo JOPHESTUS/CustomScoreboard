@@ -36,9 +36,8 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
     int kill = 0;
     int death = 0;
     int pvedeath = 0;
-    int pvepkill = 0;
-    int pvehkill = 0;
-    List<String> cunts = getConfig().getStringList("cunts");
+    int pvekill = 0;
+    List<String> cunts;
     public static HashMap<String, Integer> values = new HashMap<String, Integer>();
     public List<String> myTop5 = new ArrayList();
     ScoreboardManager manager2;
@@ -101,7 +100,8 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
         list = manager2.getNewScoreboard();
         obj = board.registerNewObjective("STATS", "dummy");
         listobj = list.registerNewObjective("TheFrontThing", "dummy");
-
+               reloadConfig();
+       cunts = getConfig().getStringList("cunts");
         if (Bukkit.getServer().getOnlinePlayers().length > 0) {
             for (Player plr : Bukkit.getServer().getOnlinePlayers()) {
                if (cunts.contains(plr.getName())){
@@ -114,10 +114,9 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                     getConfig().set("deaths." + playaa.getName(), 0);
                 }
                 death = getConfig().getInt("deaths." + playaa.getName());
-                pvedeath = getConfig().getInt("gendeaths." + playaa.getName());
-                pvepkill = getConfig().getInt("pvepkills." + playaa.getName());
-                pvehkill = getConfig().getInt("pvehkills." + playaa.getName());
-
+                pvekill = getConfig().getInt("pvekills." + playaa.getName());
+                         int blocksPlaced = getConfig().getInt("place." + playaa.getName());
+                   int blocksBroken = getConfig().getInt("break." + playaa.getName());
 
 
                 // commentstart
@@ -126,7 +125,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 // total kills
 
 
-                kill = getConfig().getInt("kills." + playaa.getName());
+
 
 
 
@@ -136,6 +135,7 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                     getConfig().set("kills." + playaa.getName(), 0);
                 }
                    reloadConfig();
+                   kill = getConfig().getInt("kills." + playaa.getName());
                    score = getConfig().getConfigurationSection("kills");
 
                 for (String playerName : score.getKeys(false)) {
@@ -297,7 +297,12 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
                 Score deaths = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_RED.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Deaths:"));
                 Score deathamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.RED.toString() + death));
                 Score pvehkills = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Mob Kills:"));
-                Score pvehkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA.toString() + pvehkill));
+                Score pvehkillsamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA.toString() + pvekill));
+
+                   Score place = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Blocks Placed:"));
+                   Score placeamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA.toString() + blocksPlaced));
+                   Score broke = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_AQUA.toString() + ChatColor.UNDERLINE + ChatColor.BOLD + "Blocks Broken:"));
+                   Score brokeamt = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.AQUA.toString() + blocksBroken));
 
                 Score line = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN.toString() + ChatColor.BOLD + "------------"));
                 Score best = obj.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_BLUE.toString() + ChatColor.BOLD + "Best PVPers"));
@@ -305,15 +310,18 @@ public class CustomScoreboard extends JavaPlugin implements Listener {
 
 
 
-                kills.setScore(22);
-                killsAmount.setScore(21);
-                deaths.setScore(20);
-                   deathamt.setScore(19);
+                kills.setScore(20);
+                killsAmount.setScore(19);
+                deaths.setScore(18);
+                   deathamt.setScore(17);
+                  
                 pvehkills.setScore(16);
                 pvehkillsamt.setScore(15);
 
-
-
+                   broke.setScore(14);
+                   brokeamt.setScore(13);
+                   place.setScore(12);
+                   placeamt.setScore(11);
 
 
                 line.setScore(10);
